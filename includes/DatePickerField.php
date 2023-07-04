@@ -63,7 +63,7 @@ class DatePickerField extends BaseFieldManager {
             'date_format_select'      => [
                 'template' => 'select',
                 'label'    => 'Date Format',
-                'help_text' => __('Select a Date Format', 'text-domain'),
+                'help_text' => __('Select a Date Format', 'fluentform'),
                 'options'   => [
                     [
                         'value' => 'M/D/YY',
