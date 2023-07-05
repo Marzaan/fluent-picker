@@ -2,7 +2,6 @@
 
 namespace FF_Addon\Components;
 
-use FluentForm\App\Modules\Form\FormDataParser;
 use FluentForm\App\Helpers\Helper;
 use FluentForm\Framework\Helpers\ArrayHelper;
 use FluentForm\App\Services\FormBuilder\Components\Select;
@@ -120,10 +119,10 @@ class SelectDate extends Select
     public function getMonthOptions(){
         $options = [];
         for($i = 1; $i <= 12; $i++){
-            $monthValue = sprintf('%02d', $i);
+            $monthName = date('F', mktime(0, 0, 0, $i, 10));
             $options[] = [
-                'label' => date('F', mktime(0, 0, 0, $i, 10)),
-                'value' => $monthValue,
+                'label' => $monthName,
+                'value' => $monthName,
             ];
         }
         return $options;
@@ -160,12 +159,14 @@ class SelectDate extends Select
                     function updateDateOptions(){
                         const date  = dateID.val();
                         const year = yearID.val();
-                        const month = monthID.val();
-                        const dateValue = year + '-' + month + '-' + date;
-                        console.log(dateValue);
+                        const monthName = monthID.val();
+
+                        // Get the month value from month name
+                        const dateFromMonth = new Date(`${monthName} 1, 2000`);
+                        const monthValue = dateFromMonth.getMonth() + 1;
                         
                         // Get the number of days in the selected month
-                        dayInMonth = new Date(year, month, 0).getDate();
+                        dayInMonth = new Date(year, monthValue, 0).getDate();
 
                         // Clear existing options
                         dateID.empty();
@@ -180,13 +181,8 @@ class SelectDate extends Select
                             dateID.append(optionElement);
                         }
 
-                        // Set the selected date to the last day of the month if the previous date is greater than the number of days in the month
-                        if(date > dayInMonth){
-                            dateID.val(dayInMonth);
-                        }
-                        else{
-                            dateID.val(date);
-                        }
+                        // Update the selected date to the last day of the month if the previous date is greater than the number of days in the month
+                        dateID.val((date > dayInMonth) ? dayInMonth : date);
                     }
                     const monthID = $('#<?php echo $id; ?>_month_');
                     const yearID = $('#<?php echo $id; ?>_year_');

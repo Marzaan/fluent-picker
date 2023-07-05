@@ -31,37 +31,11 @@ class MultiSelectDate extends BaseFieldManager {
                 'admin_field_label'  => $this->title,
                 'label'              => '',
                 'label_placement'    => 'top',
+                'date_fields'        => '',
                 'start_year'         => date("Y") - 10,
-                'end_year'           => date("Y") + 10
+                'end_year'           => date("Y") + 10,
             ],
             'fields' => [
-                'month' => [
-                    'element'    => 'select',
-                    'attributes' => [
-                        'name'  => 'month',
-                        'type'  => 'select',
-                        'value' => date('m'),
-                        'id'    => '',
-                        'class' => '',
-                        'placeholder' => 'Select Month',
-                    ],
-                    'settings' => [
-                        'dynamic_default_value' => '',
-                        'label'                 => __('Month', 'fluentform'),
-                        'admin_field_label'     => '',
-                        'help_message'          => '',
-                        'container_class'       => '',
-                        'label_placement'       => '',
-                        'placeholder'           => '- Select Month -',
-                        'calc_value_status'  => false,
-                        'visible'            => true,
-                        'values_visible'     => false,
-                    ],
-                    'editor_options' => [
-                        'title'      => $this->title,
-                        'template'   => 'inputText',
-                    ],
-                ],
                 'date' => [
                     'element'    => 'select',
                     'attributes' => [
@@ -73,16 +47,49 @@ class MultiSelectDate extends BaseFieldManager {
                         'placeholder' => 'Select Date',
                     ],
                     'settings' => [
-                        'dynamic_default_value' => '',
                         'label'                 => __('Date', 'fluentform'),
-                        'admin_field_label'     => '',
                         'help_message'          => '',
-                        'container_class'       => '',
                         'label_placement'       => '',
                         'placeholder'           => '- Select Date -',
-                        'calc_value_status'  => false,
-                        'visible'            => true,
-                        'values_visible'     => false,
+                        'calc_value_status'     => false,
+                        'visible'               => true,
+                        'values_visible'        => false,
+                        'validation_rules'      => [
+                            'required' => [
+                                'value'   => false,
+                                'message' => __('This field is required', 'fluentform'),
+                            ],
+                        ]
+                    ],
+                    'editor_options' => [
+                        'title'      => $this->title,
+                        'template'   => 'inputText',
+                    ],
+                ],
+                'month' => [
+                    'element'    => 'select',
+                    'attributes' => [
+                        'name'  => 'month',
+                        'type'  => 'select',
+                        'value' => date('F'),
+                        'id'    => '',
+                        'class' => '',
+                        'placeholder' => 'Select Month',
+                    ],
+                    'settings' => [
+                        'label'                 => __('Month', 'fluentform'),
+                        'help_message'          => '',
+                        'label_placement'       => '',
+                        'placeholder'           => '- Select Month -',
+                        'calc_value_status'     => false,
+                        'visible'               => true,
+                        'values_visible'        => false,
+                        'validation_rules'      => [
+                            'required' => [
+                                'value'   => false,
+                                'message' => __('This field is required', 'fluentform'),
+                            ],
+                        ]
                     ],
                     'editor_options' => [
                         'title'      => $this->title,
@@ -100,16 +107,19 @@ class MultiSelectDate extends BaseFieldManager {
                         'placeholder' => 'Select Year',
                     ],
                     'settings' => [
-                        'dynamic_default_value' => '',
                         'label'                 => __('Year', 'fluentform'),
-                        'admin_field_label'     => '',
                         'help_message'          => '',
-                        'container_class'       => '',
                         'label_placement'       => '',
                         'placeholder'           => '- Select Year -',
-                        'calc_value_status'  => false,
-                        'visible'            => true,
-                        'values_visible'     => false,
+                        'calc_value_status'     => false,
+                        'visible'               => true,
+                        'values_visible'        => false,
+                        'validation_rules'      => [
+                            'required' => [
+                                'value'   => false,
+                                'message' => __('This field is required', 'fluentform'),
+                            ],
+                        ]
                     ],
                     'editor_options' => [
                         'title'      => $this->title,
@@ -129,6 +139,10 @@ class MultiSelectDate extends BaseFieldManager {
     public function generalEditorElement()
     {
         return [
+            'date_fields'       => [
+                'template'  => 'nameFields',
+                'label'     => __('Date Fields'),
+            ],
             'start_year'       => [
                 'template'  => 'inputNumber',
                 'label'     => __('Start Year'),
@@ -138,7 +152,7 @@ class MultiSelectDate extends BaseFieldManager {
                 'template'  => 'inputNumber',
                 'label'     => __('End Year'),
                 'help_text' => __('Enter the End Year'),
-            ]
+            ],
         ];
     }
 
