@@ -19,8 +19,8 @@ class SelectDate extends Select
     public function compile($data, $form)
     {
         $elementName = $data['element'];
-        $startYear = ArrayHelper::get($data, 'settings.start_year');
-        $endYear = ArrayHelper::get($data, 'settings.end_year');
+        $startYear = ArrayHelper::get($data, 'multi_field.fields.year.settings.start_year.value');
+        $endYear = ArrayHelper::get($data, 'multi_field.fields.year.settings.end_year.value');
 
         $data = apply_filters_deprecated(
             'fluentform_rendering_field_data_' . $elementName,
@@ -50,16 +50,23 @@ class SelectDate extends Select
         );
 
         $html = "<div {$atts}>";
+
+        if ($label = $data['multi_field']['settings']['label']){
+            $html .= "<div class='ff-el-input--label'>";
+            $html .= '<label aria-label='.esc_attr("$label").'>' . esc_attr($label) . '</label>';
+            $html .= '</div>';
+        }
+        
         $html .= "<div class='ff-t-container'>";
 
-        $labelPlacement = ArrayHelper::get($data, 'settings.label_placement');
+        $labelPlacement = ArrayHelper::get($data, 'multi_field.settings.label_placement');
         $labelPlacementClass = '';
 
         if ($labelPlacement) {
             $labelPlacementClass = ' ff-el-form-' . $labelPlacement;
         }
         
-        foreach ($data['fields'] as $field) {
+        foreach ($data['multi_field']['fields'] as $field) {
             if($field['settings']['visible']) {
                 $fieldName = $field['attributes']['name'];
                 $field['attributes']['name'] = $rootName . '[' . $fieldName . ']';
@@ -164,10 +171,15 @@ class SelectDate extends Select
                         // Get the month value from month name
                         const dateFromMonth = new Date(`${monthName} 1, 2000`);
                         const monthValue = dateFromMonth.getMonth() + 1;
+
+                        // If the month is not selected, do nothing
+                        if(!monthValue){
+                            return;
+                        }
                         
                         // Get the number of days in the selected month
                         dayInMonth = new Date(year, monthValue, 0).getDate();
-
+                        
                         // Clear existing options
                         dateID.empty();
 
